@@ -72,7 +72,20 @@ export default function Projects() {
               </div>
 
               <div className="project-card-actions">
-                {project.github ? (
+                {project.playstoreUrl ? (
+                  <a
+                    href={project.playstoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="project-link-btn"
+                    title="Voir l'application sur le Google Play Store"
+                    style={{ background: 'var(--gold-light)', borderColor: 'var(--gold-border)', color: 'var(--navy-deep)', fontWeight: '700' }}
+                  >
+                    <Smartphone size={15} className="accent-gold" />
+                    <span>Voir sur Google Play Store</span>
+                    <ExternalLink size={13} style={{ marginLeft: '4px' }} />
+                  </a>
+                ) : project.github ? (
                   <a
                     href={project.github}
                     target="_blank"

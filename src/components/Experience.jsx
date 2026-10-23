@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { experiencesData, educationData, certificationsData, volunteerData } from '../data/portfolioData';
-import { Briefcase, GraduationCap, Award, Heart, CheckCircle2 } from 'lucide-react';
+import { Briefcase, GraduationCap, Award, Heart, CheckCircle2, ExternalLink, Smartphone } from 'lucide-react';
 
 export default function Experience() {
   const [activeTab, setActiveTab] = useState('exp'); // 'exp' ou 'edu'
@@ -72,6 +72,23 @@ export default function Experience() {
                     </span>
                   ))}
                 </div>
+
+                {exp.playstoreUrl && (
+                  <div style={{ marginTop: '14px' }}>
+                    <a
+                      href={exp.playstoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-secondary"
+                      style={{ padding: '7px 14px', fontSize: '13px', display: 'inline-flex', gap: '8px', alignItems: 'center' }}
+                      title="Voir l'application Flypoints sur le Google Play Store"
+                    >
+                      <Smartphone size={15} className="accent-gold" />
+                      <span>Voir Flypoints sur Google Play Store</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -115,6 +132,22 @@ export default function Experience() {
                 </div>
                 <h4>{cert.title}</h4>
                 <p className="edu-details">{cert.details}</p>
+
+                {cert.link && (
+                  <div style={{ marginTop: '12px' }}>
+                    <a
+                      href={cert.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-secondary"
+                      style={{ padding: '6px 14px', fontSize: '13px', display: 'inline-flex', gap: '6px', alignItems: 'center' }}
+                      title="Vérifier la certification sur Coursera"
+                    >
+                      <ExternalLink size={14} className="accent-gold" />
+                      <span>Vérifier le certificat sur Coursera</span>
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>

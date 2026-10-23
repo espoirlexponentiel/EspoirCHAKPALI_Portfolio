@@ -63,6 +63,7 @@ export const experiencesData = [
     company: "Revolutech",
     type: "FinTech & Travel-Tech",
     badge: "En cours",
+    playstoreUrl: "https://play.google.com/store/apps/details?id=com.compagnie.gestion_vols_app&hl=fr",
     description: "Conception, développement et déploiement de l'application mobile innovante Flypoints (FinTech & Travel-Tech).",
     points: [
       "Développement complet de l'application mobile Flypoints : solution permettant d'acheter des billets d'avion à crédit et de cotiser progressivement (épargne pas-à-pas) pour payer ses billets.",
@@ -123,6 +124,7 @@ export const certificationsData = [
     title: "Google Data Analytics Professional Certificate",
     issuer: "Google",
     tag: "Certifié",
+    link: "https://www.coursera.org/account/accomplishments/specialization/IXUONO1PKTA5?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof",
     details: "Maîtrise du cycle de vie complet de la donnée : collecte, nettoyage, analyse avancée avec SQL & BigQuery, et visualisation avec Tableau."
   }
 ];
@@ -146,7 +148,8 @@ export const projectsData = [
     tech: ["Flutter", "Dart", "FinTech", "Google Play Store", "APIs REST", "Mobile Money"],
     github: null,
     playstore: true,
-    demo: null,
+    playstoreUrl: "https://play.google.com/store/apps/details?id=com.compagnie.gestion_vols_app&hl=fr",
+    demo: "https://play.google.com/store/apps/details?id=com.compagnie.gestion_vols_app&hl=fr",
     highlight: "Déployé sur le Google Play Store"
   },
   {

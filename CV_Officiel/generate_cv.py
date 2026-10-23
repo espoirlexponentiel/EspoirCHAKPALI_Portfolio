@@ -1,0 +1,510 @@
+import os
+
+html_content = """<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>CV - CHAKPALI AHLIN ESPOIR</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      width: 210mm;
+      height: 297mm;
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #102845;
+      font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      font-size: 11pt;
+      line-height: 1.42;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      max-height: 297mm;
+      padding: 8.5mm 10.5mm;
+      box-sizing: border-box;
+      background: #ffffff;
+      overflow: hidden;
+    }
+
+    /* Cadre rectangulaire sobre et authentique qui occupe toute la page */
+    .outer-border {
+      border: 1.5pt solid #102845;
+      height: 100%;
+      padding: 18px 22px 16px 22px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .name {
+      font-size: 26.5pt;
+      font-weight: 700;
+      color: #102845;
+      letter-spacing: 0.6px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      font-family: Arial, 'Segoe UI', sans-serif;
+    }
+
+    .title-sub {
+      font-size: 13.5pt;
+      font-weight: 700;
+      color: #102845;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 9px;
+    }
+
+    /* Tableau de contact à 3 colonnes comme le CV d'origine */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 9px;
+    }
+
+    .contact-table td {
+      border: 1px solid #102845;
+      padding: 5px 8px;
+      text-align: center;
+      font-size: 9.8pt;
+      color: #102845;
+    }
+
+    .contact-table a {
+      color: #102845;
+      text-decoration: none;
+    }
+
+    .summary-text {
+      font-size: 9.8pt;
+      color: #222222;
+      line-height: 1.46;
+      text-align: justify;
+      margin-bottom: 9px;
+    }
+
+    .header-separator {
+      border: none;
+      border-top: 1px solid #102845;
+      margin: 0 0 12px 0;
+    }
+
+    /* CORPS DU CV EN 2 COLONNES AVEC LIGNE VERTICALE CONTINUE */
+    .cv-columns {
+      display: flex;
+      flex: 1;
+      gap: 0;
+    }
+
+    .left-col {
+      width: 58%;
+      padding-right: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .right-col {
+      width: 42%;
+      padding-left: 18px;
+      border-left: 1px solid #102845;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 16px;
+    }
+
+    /* TITRES DE SECTIONS */
+    .section-title {
+      font-size: 13.5pt;
+      font-weight: 700;
+      color: #102845;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    /* FORMATIONS */
+    .edu-block {
+      margin-bottom: 7px;
+    }
+
+    .edu-school {
+      font-size: 10.8pt;
+      font-weight: 700;
+      color: #b87a00;
+    }
+
+    .edu-desc {
+      font-size: 9.6pt;
+      color: #222222;
+      line-height: 1.38;
+    }
+
+    /* EXPERIENCES AVEC 3 POINTS CHACUN */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .exp-block {
+      margin-bottom: 0;
+    }
+
+    .exp-title {
+      font-size: 10.8pt;
+      font-weight: 700;
+      color: #b87a00;
+      line-height: 1.25;
+    }
+
+    .exp-date {
+      font-size: 9.8pt;
+      font-weight: 700;
+      color: #102845;
+      margin-bottom: 3px;
+    }
+
+    /* Listes à puces (3 points par expérience) */
+    .exp-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 3px 0 0 0;
+    }
+
+    .exp-bullets li {
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 3px;
+      font-size: 9.4pt;
+      color: #222222;
+      line-height: 1.40;
+      text-align: justify;
+    }
+
+    .exp-bullets li::before {
+      content: '•';
+      position: absolute;
+      left: 1px;
+      top: -1px;
+      color: #102845;
+      font-size: 11pt;
+      font-weight: 700;
+    }
+
+    /* COMPETENCES & BARRES */
+    .skill-row {
+      margin-bottom: 8px;
+    }
+
+    .skill-name {
+      font-size: 9.6pt;
+      color: #102845;
+      font-weight: 600;
+      margin-bottom: 2.5px;
+    }
+
+    .bar-container {
+      width: 100%;
+      height: 7.5px;
+      border: 1px solid #102845;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #102845;
+    }
+
+    /* LANGUES */
+    .lang-row {
+      margin-bottom: 8px;
+    }
+
+    .lang-name {
+      font-size: 9.6pt;
+      color: #102845;
+      font-weight: 600;
+      margin-bottom: 2.5px;
+    }
+
+    /* CERTIFICATION */
+    .cert-line {
+      font-size: 9.8pt;
+      color: #102845;
+      margin-top: 1px;
+    }
+
+    .cert-check {
+      color: #b87a00;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+
+    .cert-name {
+      text-decoration: underline;
+      font-style: italic;
+      color: #102845;
+    }
+
+    .cert-name:hover {
+      color: #b87a00;
+    }
+
+    .cert-detail {
+      font-size: 9pt;
+      color: #555555;
+      margin-top: 2px;
+      line-height: 1.34;
+    }
+
+    /* CENTRES D'INTERET */
+    .interest-text {
+      font-size: 9.8pt;
+      color: #222222;
+      line-height: 1.36;
+      margin-top: 1px;
+    }
+
+    .interest-desc {
+      font-size: 9pt;
+      color: #555555;
+      margin-top: 2px;
+      line-height: 1.34;
+    }
+
+    /* PORTFOLIO */
+    .portfolio-line {
+      margin-top: 1px;
+    }
+
+    .portfolio-link {
+      font-size: 9.8pt;
+      color: #102845;
+      font-weight: 600;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    .portfolio-desc {
+      font-size: 9pt;
+      color: #555555;
+      margin-top: 2px;
+      line-height: 1.34;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="outer-border">
+
+      <!-- HEADER -->
+      <div class="header">
+        <h1 class="name">CHAKPALI AHLIN ESPOIR</h1>
+        <div class="title-sub">DATA ANALYST - DEVELOPPEUR FULL STACK & IA</div>
+
+        <table class="contact-table">
+          <tr>
+            <td style="width: 25%;">+228 96146504</td>
+            <td style="width: 45%;"><a href="https://github.com/espoirlexponentiel">https://github.com/espoirlexponentiel</a></td>
+            <td style="width: 30%;">espoirchakpali15@gmail.com</td>
+          </tr>
+        </table>
+
+        <p class="summary-text">
+          Développeur web, mobile et IA, titulaire d'une licence en Intelligence Artificielle et Big Data, avec des compétences en apprentissage automatique et en analyse de données. Polyvalent et rigoureux, je conçois des sites web et des applications adaptés à divers besoins, ainsi que des solutions intelligentes.
+        </p>
+
+        <hr class="header-separator" />
+      </div>
+
+      <!-- CORPS 2 COLONNES -->
+      <div class="cv-columns">
+
+        <!-- COLONNE GAUCHE : FORMATIONS & EXPERIENCES (3 POINTS CHACUN) -->
+        <div class="left-col">
+
+          <!-- FORMATIONS -->
+          <div>
+            <div class="section-title">FORMATIONS</div>
+
+            <div class="edu-block">
+              <div class="edu-school">College de Paris Supérieur de Lomé</div>
+              <div class="edu-desc">Septembre 2025 | Licence en Intelligence Artificielle et Big Data – Mention Bien</div>
+            </div>
+
+            <div class="edu-block">
+              <div class="edu-school">Lycée Tokoin I</div>
+              <div class="edu-desc">Juin 2022 | BAC II Série C4 – Mention Bien</div>
+            </div>
+          </div>
+
+          <!-- EXPERIENCES -->
+          <div>
+            <div class="section-title" style="margin-bottom: 7px;">EXPERIENCES</div>
+
+            <div class="exp-list">
+              <!-- 1. Revolutech (3 points avec lien Play Store) -->
+              <div class="exp-block">
+                <div class="exp-title">Développeur Mobile à Revolutech</div>
+                <div class="exp-date">Juillet 2026 – présent</div>
+                <ul class="exp-bullets">
+                  <li>Développement complet de l'application mobile <a href="https://play.google.com/store/apps/details?id=com.compagnie.gestion_vols_app&hl=fr" target="_blank" style="color: #102845; font-weight: 700; text-decoration: underline;">Flypoints</a> (FinTech & Travel-Tech) permettant d'acheter des billets d'avion à crédit et de cotiser progressivement.</li>
+                  <li>Conception de l'architecture mobile sous Flutter, intégration fluide des parcours d'épargne pas-à-pas et sécurisation des flux de paiement Mobile Money.</li>
+                  <li>Publication, optimisation des performances et déploiement réussi sur le <a href="https://play.google.com/store/apps/details?id=com.compagnie.gestion_vols_app&hl=fr" target="_blank" style="color: #102845; font-weight: 700; text-decoration: underline;">Google Play Store</a>.</li>
+                </ul>
+              </div>
+
+              <!-- 2. DokitaEyes (3 points) -->
+              <div class="exp-block">
+                <div class="exp-title">Stage professionnel à DokitaEyes</div>
+                <div class="exp-date">Décembre 2025 – Avril 2026</div>
+                <ul class="exp-bullets">
+                  <li>Construction d'architectures backend robustes et développement d'APIs REST sécurisées dans le domaine de la health-tech et télémédecine.</li>
+                  <li>Amélioration continue de l'accès aux soins de santé et sécurisation stricte des données médicales des patients.</li>
+                  <li>Renforcement de l'efficacité opérationnelle des services médicaux et accompagnement technique des praticiens.</li>
+                </ul>
+              </div>
+
+              <!-- 3. DGEAE / Ministère (3 points) -->
+              <div class="exp-block">
+                <div class="exp-title">Stage à la Direction Générale des Etudes et Analyses Economiques au Ministère de l'Economie et de la Veille stratégique.</div>
+                <div class="exp-date">Juin 2025 – Octobre 2025</div>
+                <ul class="exp-bullets">
+                  <li>Développement d'un modèle d'IA pour la classification automatique des activités des entreprises selon la nomenclature NAEMA.</li>
+                  <li>Gain de temps significatif, réduction des ressources humaines mobilisées et optimisation substantielle des coûts de traitement.</li>
+                  <li>Automatisation et optimisation complète du Tableau de bord de l'Économie Togolaise via VBA (génération dynamique des graphiques et rapports analytiques d'aide à la décision).</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- COLONNE DROITE : COMPETENCES, LANGUES, CERTIFICATION, CENTRES D'INTERET, PORTFOLIO -->
+        <div class="right-col">
+
+          <!-- COMPETENCES -->
+          <div>
+            <div class="section-title">COMPETENCES</div>
+
+            <div class="skill-row">
+              <div class="skill-name">Python (FastAPI, Flask)</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 95%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">TypeScript/Node, React, Quasar, Vue</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 92%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">Dart/Flutter</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 90%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">SQL (PostgreSQL, Mysql)</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">Docker, Docker Compose</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 85%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">VBA Excel</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 90%;"></div></div>
+            </div>
+
+            <div class="skill-row">
+              <div class="skill-name">Power BI</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 88%;"></div></div>
+            </div>
+          </div>
+
+          <!-- LANGUES PARLEES -->
+          <div>
+            <div class="section-title">LANGUES PARLEES</div>
+
+            <div class="lang-row">
+              <div class="lang-name">Français</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 98%;"></div></div>
+            </div>
+
+            <div class="lang-row">
+              <div class="lang-name">Anglais</div>
+              <div class="bar-container"><div class="bar-fill" style="width: 78%;"></div></div>
+            </div>
+          </div>
+
+          <!-- CERTIFICATION (AVEC HYPERLIEN COURSERA) -->
+          <div>
+            <div class="section-title">CERTIFICATION</div>
+            <div class="cert-line">
+              <span class="cert-check">✓</span>
+              <a href="https://www.coursera.org/account/accomplishments/specialization/IXUONO1PKTA5?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof" target="_blank" class="cert-name" title="Vérifier la certification sur Coursera">Google Data Analyst</a>
+            </div>
+            <div class="cert-detail">
+              <a href="https://www.coursera.org/account/accomplishments/specialization/IXUONO1PKTA5?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta&utm_product=prof" target="_blank" style="color: #555555; text-decoration: underline;" title="Lien de vérification du certificat">Google Professional Certificate (BigQuery, SQL, Tableau)</a>
+            </div>
+          </div>
+
+          <!-- CENTRES D'INTERET -->
+          <div>
+            <div class="section-title">CENTRES D'INTERET</div>
+            <div class="interest-text">
+              ONG KGA Droit a la vie (Membre Actif)
+            </div>
+            <div class="interest-desc">Engagement citoyen et actions d'entraide communautaire.</div>
+          </div>
+
+          <!-- PORTFOLIO EN LIGNE -->
+          <div>
+            <div class="section-title">PORTFOLIO</div>
+            <div class="portfolio-line">
+              <a href="https://portfolio-espoir-chakpali.onrender.com" target="_blank" class="portfolio-link">portfolio-espoir-chakpali.onrender.com</a>
+            </div>
+            <div class="portfolio-desc">Projets interactifs, démonstrations & architectures en ligne.</div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+html_path = r"c:\Projets\Portfolio\CV_Officiel\CV_CHAKPALI_Ahlin_Espoir.html"
+with open(html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"HTML écrit dans : {html_path}")
